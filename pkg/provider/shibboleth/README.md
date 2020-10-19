@@ -8,7 +8,7 @@ https://idp.example.com/idp/profile/SAML2/Unsolicited/SSO?providerId=urn:amazon:
 
 ## Features
 
-* Prompts for Duo MFA when logging in when "mfa" is set to Auto. Options are Duo Push, Phone Call, and Passcode.
+* Prompts for Duo MFA or [Shibboleth-IdP3-TOTP-Auth](https://github.com/joeFischetti/Shibboleth-IdP3-TOTP-Auth) when logging in when "mfa" is set to Auto. Duo options are Push, Phone Call, and Passcode.
 * Supports Duo MFA authorized networks bypass - 2 factor authentication is skipped if invoked from an authorized network
 * Ability to disable MFA. Set 'None' istead of 'Auto'.
 
