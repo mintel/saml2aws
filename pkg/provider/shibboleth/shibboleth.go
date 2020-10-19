@@ -142,21 +142,32 @@ func updateFormData(authForm url.Values, s *goquery.Selection, user *creds.Login
 }
 
 func verifyMfa(oc *Client, shibbolethHost string, resp string) (*http.Response, error) {
+	var u string
+	idpForm := url.Values{}
 
-	duoHost, postAction, tx, app := parseTokens(resp)
+	// If the response contains an iframe, this is probably a Duo prompt.
+	if strings.Contains(resp, "<iframe") {
+		duoHost, postAction, tx, app := parseTokens(resp)
 
-	parent := fmt.Sprintf(shibbolethHost + postAction)
+		u = fmt.Sprintf(shibbolethHost + postAction)
 
-	duoTxCookie, err := verifyDuoMfa(oc, duoHost, parent, tx)
-	if err != nil {
-		return nil, errors.Wrap(err, "error when interacting with Duo iframe")
+		duoTxCookie, err := verifyDuoMfa(oc, duoHost, u, tx)
+		if err != nil {
+			return nil, errors.Wrap(err, "error when interacting with Duo iframe")
+		}
+
+		idpForm.Add("_eventId", "proceed")
+		idpForm.Add("sig_response", duoTxCookie+":"+app)
+	} else {
+		u = fmt.Sprintf("%s/idp/profile/SAML2/Unsolicited/SSO?execution=e1s2", shibbolethHost)
+
+		mfaToken := prompter.StringRequired("Enter passcode")
+
+		idpForm.Add("j_tokenNumber", mfaToken)
+		idpForm.Add("_eventId_proceed", "Logging in, please wait...")
 	}
 
-	idpForm := url.Values{}
-	idpForm.Add("_eventId", "proceed")
-	idpForm.Add("sig_response", duoTxCookie+":"+app)
-
-	req, err := http.NewRequest("POST", parent, strings.NewReader(idpForm.Encode()))
+	req, err := http.NewRequest("POST", u, strings.NewReader(idpForm.Encode()))
 	if err != nil {
 		return nil, errors.Wrap(err, "error posting multi-factor verification to shibboleth server")
 	}
