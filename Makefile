@@ -1,10 +1,15 @@
 NAME=saml2aws
 ARCH=$(shell uname -m)
+<<<<<<< HEAD
 VERSION=2.28.0
 ITERATION := 1.mintel
 
 GOLANGCI_VERSION = 1.32.0
 GORELEASER_VERSION = 0.179.0
+=======
+VERSION=2.27.1
+ITERATION := 1.mintel
+>>>>>>> 9e93a4b (Add `.mintel` to package version iteration)
 
 SOURCE_FILES?=$$(go list ./... | grep -v /vendor/)
 TEST_PATTERN?=.
