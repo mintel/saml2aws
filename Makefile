@@ -1,7 +1,7 @@
 NAME=saml2aws
 ARCH=$(shell uname -m)
 VERSION=2.27.1
-ITERATION := 1
+ITERATION := 1.mintel
 
 SOURCE_FILES?=$$(go list ./... | grep -v /vendor/)
 TEST_PATTERN?=.
