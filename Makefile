@@ -1,6 +1,6 @@
 NAME=saml2aws
 ARCH=$(shell uname -m)
-VERSION=2.31.0
+VERSION=2.32.0
 ITERATION := 1.mintel
 
 GOLANGCI_VERSION = 1.32.0
