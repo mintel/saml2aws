@@ -19,6 +19,8 @@ import (
 
 // Client wrapper around KeyCloak.
 type Client struct {
+	provider.ValidateBase
+
 	client *provider.HTTPClient
 }
 
@@ -70,23 +72,7 @@ func (kc *Client) Authenticate(loginDetails *creds.LoginDetails) (string, error)
 		}
 	}
 
-	var samlAssertion string
-
-	doc.Find("input").Each(func(i int, s *goquery.Selection) {
-		name, ok := s.Attr("name")
-		if !ok {
-			log.Fatalf("unable to locate IDP authentication form submit URL")
-		}
-		if name == "SAMLResponse" {
-			val, ok := s.Attr("value")
-			if !ok {
-				log.Fatalf("unable to locate saml assertion value")
-			}
-			samlAssertion = val
-		}
-	})
-
-	return samlAssertion, nil
+	return extractSamlResponse(doc), nil
 }
 
 func (kc *Client) getLoginForm(loginDetails *creds.LoginDetails) (string, url.Values, error) {
@@ -195,6 +181,27 @@ func extractSubmitURL(doc *goquery.Document) (string, error) {
 	}
 
 	return submitURL, nil
+}
+
+func extractSamlResponse(doc *goquery.Document) string {
+	var samlAssertion string
+
+	doc.Find("input").Each(func(i int, s *goquery.Selection) {
+		name, ok := s.Attr("name")
+		if ( ok && name == "SAMLResponse" ) {
+			val, ok := s.Attr("value")
+			if !ok {
+				log.Fatalf("unable to locate saml assertion value")
+			}
+			samlAssertion = val
+		}
+	})
+
+	if samlAssertion == "" {
+		log.Fatalf("unable to locate saml response field")
+	}
+
+	return samlAssertion
 }
 
 func containsTotpForm(doc *goquery.Document) bool {
