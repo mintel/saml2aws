@@ -52,6 +52,7 @@ The process goes something like this:
   * [Akamai](pkg/provider/akamai/README.md)
   * OneLogin
   * NetIQ
+  * Browser, this uses [playwright-go](github.com/mxschmitt/playwright-go) to run a sandbox chromium window.
 * AWS SAML Provider configured
 
 ## Caveats
@@ -89,11 +90,15 @@ While brew is available for Linux you can also run the following without using a
 $ CURRENT_VERSION=$(curl -Ls https://api.github.com/repos/Versent/saml2aws/releases/latest | grep 'tag_name' | cut -d'v' -f2 | cut -d'"' -f1)
 $ wget -c https://github.com/Versent/saml2aws/releases/download/v${CURRENT_VERSION}/saml2aws_${CURRENT_VERSION}_linux_amd64.tar.gz -O - | tar -xzv -C ~/.local/bin
 $ chmod u+x ~/.local/bin/saml2aws
+$ hash -r
 $ saml2aws --version
 ```
-**Note**: You will need to logout of your current user session or force a bash reload for `saml2aws` to be useable after following the above steps.
 
-e.g. `exec -l bash`
+#### [Arch Linux](https://archlinux.org/) and its derivatives
+
+The `saml2aws` tool is available in AUR ([saml2aws-bin](https://aur.archlinux.org/packages/saml2aws-bin/)), so you can install it using an available AUR helper:
+
+* Manjaro: `$ pamac build saml2aws-bin`
 
 #### [Void Linux](https://voidlinux.org/)
 
@@ -543,6 +548,7 @@ Use following parameters in `~/.saml2aws` file:
 - `http_attempts_count` - configures the number of attempts to send http requests in order to authorise with saml provider. Defaults to 1
 - `http_retry_delay` - configures the duration (in seconds) of timeout between attempts to send http requests to saml provider. Defaults to 1
 - `region` - configures which region endpoints to use, See [Audience](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_saml_assertions.html#saml_audience-restriction) and [partition](https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arns-syntax)
+- `target_url` - look for a target endpoint other than signin.aws.amazon.com/saml. The Okta, Pingfed, Pingone and Shibboleth ECP providers need to either explicitly send or look for this URL in a response in order to obtain or identify an appropriate authentication response. This can be overridden here if you wish to authenticate for something other than AWS.
 
 Example: typical configuration with such parameters would look like follows:
 ```
