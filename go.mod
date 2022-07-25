@@ -19,13 +19,12 @@ require (
 	github.com/google/uuid v1.2.0
 	github.com/keybase/go-keychain v0.0.0-20190712205309-48d3d31d256d
 	github.com/kr/text v0.2.0 // indirect
-	github.com/magefile/mage v1.11.0 // indirect
 	github.com/marshallbrekka/go-u2fhost v0.0.0-20210111072507-3ccdec8c8105
 	github.com/mattn/go-colorable v0.1.8 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mxschmitt/playwright-go v0.1100.0
 	github.com/pkg/errors v0.9.1
-	github.com/sirupsen/logrus v1.7.1
+	github.com/sirupsen/logrus v1.9.0
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966
 	github.com/smartystreets/assertions v1.0.0 // indirect
 	github.com/smartystreets/goconvey v1.6.4 // indirect
@@ -34,7 +33,6 @@ require (
 	github.com/tidwall/gjson v1.8.1
 	golang.org/x/crypto v0.0.0-20201221181555-eec23a3978ad // indirect
 	golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4
-	golang.org/x/sys v0.0.0-20210603125802-9665404d3644 // indirect
 	golang.org/x/term v0.0.0-20201210144234-2321bbc49cbf // indirect
 	golang.org/x/text v0.3.5 // indirect
 	gopkg.in/ini.v1 v1.62.0
